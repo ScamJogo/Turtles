@@ -14,6 +14,8 @@ end
 
 function Bridge()
     while Distance < Len do
+        print(Distance)
+        print(Len)
         Change_Slot()
         turtle.placeDown()
         turtle.forward()
