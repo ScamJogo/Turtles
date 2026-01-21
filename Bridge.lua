@@ -20,3 +20,5 @@ function Bridge()
         Distance = Distance + 1
     end
 end
+
+Bridge()
