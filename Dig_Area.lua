@@ -140,3 +140,6 @@ end
 function DigArea()
     
 end
+
+
+Spiral()
