@@ -36,30 +36,51 @@ end
 
 function Move_Forward()
 
+    local function forward_with_clear()
+        local attempts = 0
+        while true do
+            DigUpDown() -- clear around before moving
+            if turtle.forward() then
+                DigUpDown() -- clear gravel that may fall after moving
+                return true
+            end
+
+            -- blocked: try to clear and retry
+            if turtle.detect() then
+                turtle.dig()
+            else
+                turtle.attack()
+            end
+
+            attempts = attempts + 1
+            if attempts > 20 then
+                print("Blocked: can't move forward after repeated attempts.")
+                return false
+            end
+            sleep(0.2) -- let falling blocks settle
+        end
+    end
+
     print("My local cords are", "X", Local_X, "Y", Local_Y, "Z", Local_Z)
     if Direction =="+X" then
-        Local_X = Local_X + 1
-        DigUpDown()
-        turtle.forward()
-        DigUpDown()
+        if forward_with_clear() then
+            Local_X = Local_X + 1
+        end
 
     elseif Direction =="-X" then
-        Local_X = Local_X - 1 
-        DigUpDown()
-        turtle.forward()
-        DigUpDown()
+        if forward_with_clear() then
+            Local_X = Local_X - 1 
+        end
 
     elseif Direction =="+Z" then
-        Local_Z = Local_Z + 1 
-        DigUpDown()
-        turtle.forward()
-        DigUpDown()
+        if forward_with_clear() then
+            Local_Z = Local_Z + 1 
+        end
 
     elseif Direction =="-Z" then
-        Local_Z = Local_Z - 1 
-        DigUpDown()
-        turtle.forward()
-        DigUpDown()
+        if forward_with_clear() then
+            Local_Z = Local_Z - 1 
+        end
     end
 end
 
