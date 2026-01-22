@@ -104,30 +104,31 @@ end
 
 function Spiral()
     TurnLeft()
+    print("step 1")
    while Local_Z > -Area / 2 do
         Move_Forward()
     end
 
     TurnRight()
-
+    print("step 2")
     while Local_X < Area  do
         Move_Forward()
     end
 
     TurnRight()
-
+    print("step 3")
     while Local_Z < Area do
         Move_Forward()
     end
 
     TurnRight()
-
+    print("step 4")
     while Local_X > Area do
         Move_Forward()
     end
 
     TurnRight()
-
+    print("step 5")
     while Local_Z > -Area / 2 do
         Move_Forward()
     end
