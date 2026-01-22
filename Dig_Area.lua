@@ -34,9 +34,33 @@ function DigUpDown()
     end
 end
 
+-- Keep the turtle fueled using items in slot 1. Refuel if below 250.
+local function ensure_fuel()
+    local level = turtle.getFuelLevel()
+    if level == "unlimited" or level == nil then return true end
+    if level >= 250 then return true end
+
+    local prev = turtle.getSelectedSlot()
+    turtle.select(1)
+    local count = turtle.getItemCount(1)
+    if count > 0 then
+        turtle.refuel(math.min(8, count))
+    end
+    turtle.select(prev)
+
+    level = turtle.getFuelLevel()
+    if level == "unlimited" or level >= 250 then
+        return true
+    else
+        print("Low fuel: add fuel to slot 1.")
+        return false
+    end
+end
+
 function Move_Forward()
 
     local function forward_with_clear()
+        if not ensure_fuel() then return false end
         local attempts = 0
         while true do
             DigUpDown() -- clear around before moving
@@ -85,12 +109,14 @@ function Move_Forward()
 end
 
 function Move_Up()
+    if not ensure_fuel() then return end
     Local_Y = Local_Y + 1
     turtle.digUp()
     turtle.up()
 end
 
 function Move_Down()
+    if not ensure_fuel() then return end
     Local_Y = Local_Y - 1
     turtle.digDown()
     turtle.down()
