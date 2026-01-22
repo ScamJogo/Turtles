@@ -107,7 +107,7 @@ end
 
 function Return_To_Start()
     local half = math.floor(Area / 2)
-    if Local_X == half and Local_Z == half then
+    if Laps == half then
         while Direction ~= "-X" do
             TurnRight()
             if Direction == "-X" then
@@ -164,12 +164,14 @@ function Spiral()
         while Local_Z > 0 do
             Move_Forward()
         end
-        
+
         Return_To_Start()
         TurnRight()
         Move_Forward()
 
         Laps = Laps + 1 
+        local half = math.floor(Area / 2)
+        print("Laps", Laps, "half", half)
     end
 end
 
