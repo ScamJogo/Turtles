@@ -80,7 +80,13 @@ end
 local function has_ore_tag(data)
     if not data or not data.tags then return false end
     for tag, v in pairs(data.tags) do
-        if v and tag:find("ore") then return true end
+        if v then
+            -- Treat as ore only if the tag actually denotes ores, not replaceables.
+            -- Matches things like forge:ores, c:ores, minecraft:iron_ores, minecraft:diamond_ore.
+            if (tag:match("ores$") or tag:match("_ore$")) and not tag:match("ore_replace") then
+                return true
+            end
+        end
     end
     return false
 end
