@@ -31,7 +31,7 @@ end
 
 function Move_Forward()
 
-    print("My local cords are", Local_X, Local_Y, Local_Z)
+    print("My local cords are", "X", Local_X, "Y", Local_Y, "Z", Local_Z)
     if Direction =="+X" then
         Local_X = Local_X + 1
         DigUpDown()
@@ -117,13 +117,13 @@ function Spiral()
 
     TurnRight() -- Face +Z
     print("step 3")
-    while Local_Z < Area / 2 -1 do
+    while Local_Z < Area / 2 do
         Move_Forward()
     end
 
     TurnRight() -- Face -X
     print("step 4")
-    while Local_X > -Area / 2 -1 do
+    while Local_X > -Area / 2 +1 do
         Move_Forward()
     end
 
