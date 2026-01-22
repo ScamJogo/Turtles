@@ -137,30 +137,35 @@ function Spiral()
             Move_Forward()
         end
 
+        Return_To_Start()
         TurnRight() -- Face +X
         print("step 2")
         while Local_X < Area - 1 - Laps do
             Move_Forward()
         end
 
+        Return_To_Start()
         TurnRight() -- Face +Z
         print("step 3")
         while Local_Z < Area - 3 - Laps do
             Move_Forward()
         end
 
+        Return_To_Start()
         TurnRight() -- Face -X
         print("step 4")
         while Local_X > 0 + Laps do
             Move_Forward()
         end
 
+        Return_To_Start()
         TurnRight() -- Face -Z
         print("step 5")
         while Local_Z > 0 do
             Move_Forward()
         end
-
+        
+        Return_To_Start()
         TurnRight()
         Move_Forward()
 
