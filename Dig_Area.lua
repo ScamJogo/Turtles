@@ -110,6 +110,9 @@ function Return_To_Start()
     if Local_X == half and Local_Z == half then
         while Direction ~= "-X" do
             TurnRight()
+            if Direction == "-X" then
+                break
+            end
         end
 
         while Current_X > 0 do
