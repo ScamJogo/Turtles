@@ -103,7 +103,7 @@ end
 
 function Spiral()
     TurnLeft()
-    while Local_Z > Area / 2 do
+   while Local_Z > -Area / 2 do
         Move_Forward()
     end
 
