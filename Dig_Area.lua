@@ -34,23 +34,20 @@ function Move_Forward()
         DigUpDown()
         turtle.forward()
         DigUpDown()
-    end
 
-    if Direction =="-X" then
+    elseif Direction =="-X" then
         Local_X = Local_X - 1 
         DigUpDown()
         turtle.forward()
         DigUpDown()
-    end
 
-    if Direction =="+Z" then
+    elseif Direction =="+Z" then
         Local_Z = Local_Z + 1 
         DigUpDown()
         turtle.forward()
         DigUpDown()
-    end
-
-    if Direction =="-Z" then
+        
+    elseif Direction =="-Z" then
         Local_Z = Local_Z - 1 
         DigUpDown()
         turtle.forward()
@@ -72,19 +69,13 @@ function TurnRight()
     if Direction == "+X" then
         Direction = "+Z"
         turtle.turnRight()
-    end
-
-    if Direction == "+Z" then
+    elseif Direction == "+Z" then
         Direction = "-X"
         turtle.turnRight()
-    end
-
-    if Direction == "-X" then
+    elseif Direction == "-X" then
         Direction = "-Z"
         turtle.turnRight()
-    end
-
-    if Direction == "-Z" then
+    elseif Direction == "-Z" then
         Direction = "+X"
         turtle.turnRight()
     end
@@ -94,19 +85,13 @@ function TurnLeft()
     if Direction == "+X" then
         Direction = "-Z"
         turtle.turnLeft()
-    end
-
-    if Direction == "-Z" then
+    elseif Direction == "-Z" then
         Direction = "-X"
         turtle.turnLeft()
-    end
-
-    if Direction == "-X" then
+    elseif Direction == "-X" then
         Direction = "+Z"
         turtle.turnLeft()
-    end
-
-    if Direction == "+Z" then
+    elseif Direction == "+Z" then
         Direction = "+X"
         turtle.turnLeft()
     end
