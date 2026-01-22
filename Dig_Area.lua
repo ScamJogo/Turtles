@@ -13,6 +13,7 @@ Direction = "+X"
 Dig = true
 Laps = 0 
 Current_Depth = 0 
+local half = nil -- computed after Area is read
 
 function DigUpDown()
     if Dig == true then
@@ -105,73 +106,87 @@ function TurnLeft()
     end
 end
 
+-- Face a specific heading (+X, -X, +Z, -Z)
+local function Face(dir)
+    while Direction ~= dir do
+        TurnRight()
+    end
+end
+
+-- Move (digging) to an absolute local X/Z coordinate.
+local function Move_To(target_x, target_z)
+    if Local_X < target_x then
+        Face("+X")
+        while Local_X < target_x do Move_Forward() end
+    elseif Local_X > target_x then
+        Face("-X")
+        while Local_X > target_x do Move_Forward() end
+    end
+
+    if Local_Z < target_z then
+        Face("+Z")
+        while Local_Z < target_z do Move_Forward() end
+    elseif Local_Z > target_z then
+        Face("-Z")
+        while Local_Z > target_z do Move_Forward() end
+    end
+end
+
 function Return_To_Start()
-    local half = math.floor(Area / 2)
-    if Laps == half then
-        while Direction ~= "-X" do
-            TurnRight()
-            if Direction == "-X" then
-                break
-            end
-        end
-
-        while Current_X > 0 do
-            Move_Forward()
-        end
-
-        TurnRight()
-        TurnRight()
-        Move_Down()
-        Move_Down()
-        Move_Down()
-
-        Current_Depth = Current_Depth + 3
-    end 
+    -- go back to the original starting corner (-half, -half), face +X, then drop 3
+    Move_To(-half, -half)
+    Face("+X")
+    Move_Down()
+    Move_Down()
+    Move_Down()
+    Current_Depth = Current_Depth + 3
 end
 
 function Spiral()
-    while Current_Depth < Depth do 
-        TurnLeft() -- Face -Z
-        print("step 1") 
-        while Local_Z > -Area / 2 + 1 + Laps do 
-            Move_Forward()
+    half = math.floor(Area / 2)
+
+    -- Start on the top-left corner of the area (an edge position).
+    Move_To(-half, -half)
+    Face("+X")
+
+    while Current_Depth < Depth do
+        Laps = 0
+        while true do
+            local span = Area - 1 - (Laps * 2)
+            if span <= 0 then break end
+
+            -- Top edge (+X)
+            for _ = 1, span do Move_Forward() end
+            TurnRight() -- +Z
+
+            -- Right edge (+Z)
+            for _ = 1, span do Move_Forward() end
+            TurnRight() -- -X
+
+            -- Bottom edge (-X)
+            for _ = 1, span do Move_Forward() end
+            TurnRight() -- -Z
+
+            -- Left edge (-Z) back to corner
+            for _ = 1, span do Move_Forward() end
+            TurnRight() -- face +X again at starting corner of this ring
+
+            Laps = Laps + 1
+            if Laps > half then break end
+
+            -- Step one block inward (diagonal) to start next inner ring.
+            Move_Forward()      -- +X
+            TurnRight()         -- +Z
+            Move_Forward()      -- +Z
+            TurnLeft()          -- back to +X
         end
 
+        -- Finished this depth layer; return to start corner and go down 3.
         Return_To_Start()
-        TurnRight() -- Face +X
-        print("step 2")
-        while Local_X < Area - 1 - Laps do
-            Move_Forward()
-        end
 
-        Return_To_Start()
-        TurnRight() -- Face +Z
-        print("step 3")
-        while Local_Z < Area - 3 - Laps do
-            Move_Forward()
-        end
-
-        Return_To_Start()
-        TurnRight() -- Face -X
-        print("step 4")
-        while Local_X > 0 + Laps do
-            Move_Forward()
-        end
-
-        Return_To_Start()
-        TurnRight() -- Face -Z
-        print("step 5")
-        while Local_Z > 0 do
-            Move_Forward()
-        end
-
-        Return_To_Start()
-        TurnRight()
-        Move_Forward()
-
-        Laps = Laps + 1 
-        local half = math.floor(Area / 2)
-        print("Laps", Laps, "half", half)
+        -- Reposition to start corner for next layer.
+        Move_To(-half, -half)
+        Face("+X")
     end
 end
 
