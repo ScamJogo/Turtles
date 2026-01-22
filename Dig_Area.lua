@@ -124,7 +124,7 @@ function Spiral()
 
         TurnRight() -- Face -X
         print("step 4")
-        while Local_X > 0 - Laps do
+        while Local_X > 0 + Laps do
             Move_Forward()
         end
 
