@@ -123,7 +123,7 @@ function Spiral()
 
     TurnRight()
     print("step 4")
-    while Local_X > Area do
+    while Local_X < Area do
         Move_Forward()
     end
 
