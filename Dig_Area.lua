@@ -5,15 +5,18 @@ print("How deep do you want the area")
 
 Depth = tonumber(read())
 
-Local_X = 0 
+local half = math.floor(Area / 2)
+local start_x = -half   -- starting on the south edge center (north is +X)
+local start_z = 0
+
+Local_X = start_x
 Local_Y = 0
-Local_Z = 0 
+Local_Z = start_z
 
 Direction = "+X"
 Dig = true
 Laps = 0 
 Current_Depth = 0 
-local half = nil -- computed after Area is read
 
 function DigUpDown()
     if Dig == true then
@@ -133,8 +136,8 @@ local function Move_To(target_x, target_z)
 end
 
 function Return_To_Start()
-    -- go back to the original starting corner (-half, -half), face +X, then drop 3
-    Move_To(-half, -half)
+    -- go back to the original starting edge center, face +X, then drop 3
+    Move_To(start_x, start_z)
     Face("+X")
     Move_Down()
     Move_Down()
@@ -143,50 +146,45 @@ function Return_To_Start()
 end
 
 function Spiral()
-    half = math.floor(Area / 2)
-
-    -- Start on the top-left corner of the area (an edge position).
-    Move_To(-half, -half)
-    Face("+X")
+    -- Ensure starting orientation/position
+    Move_To(start_x, start_z)
+    Face("+Z") -- face along the south wall toward +Z (east)
 
     while Current_Depth < Depth do
         Laps = 0
         while true do
-            local span = Area - 1 - (Laps * 2)
-            if span <= 0 then break end
+            local minX = -half + Laps
+            local maxX =  half - Laps
+            local minZ = -half + Laps
+            local maxZ =  half - Laps
 
-            -- Top edge (+X)
-            for _ = 1, span do Move_Forward() end
-            TurnRight() -- +Z
+            if minX > maxX or minZ > maxZ then break end
 
-            -- Right edge (+Z)
-            for _ = 1, span do Move_Forward() end
-            TurnRight() -- -X
+            -- start of ring: south-edge center of current box
+            Move_To(minX, start_z)
 
-            -- Bottom edge (-X)
-            for _ = 1, span do Move_Forward() end
-            TurnRight() -- -Z
-
-            -- Left edge (-Z) back to corner
-            for _ = 1, span do Move_Forward() end
-            TurnRight() -- face +X again at starting corner of this ring
+            -- South edge, eastward to SE corner
+            Move_To(minX, maxZ)
+            -- East edge, northward
+            Move_To(maxX, maxZ)
+            -- North edge, westward
+            Move_To(maxX, minZ)
+            -- West edge, southward back toward start line
+            Move_To(minX, minZ)
+            -- Return along south edge center line to starting spot of this ring
+            Move_To(minX, start_z)
 
             Laps = Laps + 1
-            if Laps > half then break end
-
-            -- Step one block inward (diagonal) to start next inner ring.
-            Move_Forward()      -- +X
-            TurnRight()         -- +Z
-            Move_Forward()      -- +Z
-            TurnLeft()          -- back to +X
+            -- Step inward to the next ring's south-edge center
+            Move_To(-half + Laps, start_z)
         end
 
-        -- Finished this depth layer; return to start corner and go down 3.
+        -- Finished this depth layer; return to starting edge center and go down 3.
         Return_To_Start()
 
-        -- Reposition to start corner for next layer.
-        Move_To(-half, -half)
-        Face("+X")
+        -- Reposition to start edge center for next layer.
+        Move_To(start_x, start_z)
+        Face("+Z")
     end
 end
 
