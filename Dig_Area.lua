@@ -29,6 +29,8 @@ function DigUpDown()
 end
 
 function Move_Forward()
+
+    print("My local cords are", Local_X, Local_Y, Local_Z)
     if Direction =="+X" then
         Local_X = Local_X + 1
         DigUpDown()
@@ -46,7 +48,7 @@ function Move_Forward()
         DigUpDown()
         turtle.forward()
         DigUpDown()
-        
+
     elseif Direction =="-Z" then
         Local_Z = Local_Z - 1 
         DigUpDown()
@@ -66,6 +68,7 @@ function Move_Down()
 end
 
 function TurnRight()
+    print("Turning right", Direction)
     if Direction == "+X" then
         Direction = "+Z"
         turtle.turnRight()
@@ -82,6 +85,7 @@ function TurnRight()
 end
 
 function TurnLeft()
+    print("Turning left", Direction)
     if Direction == "+X" then
         Direction = "-Z"
         turtle.turnLeft()
