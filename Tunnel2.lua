@@ -68,11 +68,12 @@ local ore_seen = {} -- key "x,y,z" -> true
 
 local function key(x, y, z) return table.concat({x, y, z}, ",") end
 
-local function record_ore(x, y, z)
+local function record_ore(name, x, y, z)
     local k = key(x, y, z)
     if not ore_seen[k] then
         ore_seen[k] = true
-        table.insert(ore_queue, {x = x, y = y, z = z})
+        table.insert(ore_queue, {x = x, y = y, z = z, name = name})
+        print(string.format("Found ore: %s at (%d,%d,%d)", name or "unknown", x, y, z))
     end
 end
 
@@ -90,7 +91,7 @@ local function scan_adjacent_for_ore()
     local ok, data = turtle.inspect()
     if ok and has_ore_tag(data) then
         local dx, dz = dir_vec(Dir)
-        record_ore(X + dx, Y, Z + dz)
+        record_ore(data.name, X + dx, Y, Z + dz)
     end
     -- right, back, left
     for i = 1, 3 do
@@ -103,7 +104,7 @@ local function scan_adjacent_for_ore()
         ok, data = turtle.inspect()
         if ok and has_ore_tag(data) then
             local dx, dz = dir_vec(Dir)
-            record_ore(X + dx, Y, Z + dz)
+            record_ore(data.name, X + dx, Y, Z + dz)
         end
     end
     -- restore facing after 3 rights -> net turnLeft
@@ -115,9 +116,9 @@ local function scan_adjacent_for_ore()
 
     -- up/down
     ok, data = turtle.inspectUp()
-    if ok and has_ore_tag(data) then record_ore(X, Y + 1, Z) end
+    if ok and has_ore_tag(data) then record_ore(data.name, X, Y + 1, Z) end
     ok, data = turtle.inspectDown()
-    if ok and has_ore_tag(data) then record_ore(X, Y - 1, Z) end
+    if ok and has_ore_tag(data) then record_ore(data.name, X, Y - 1, Z) end
 end
 
 -- Mine all queued ore (vein style), then return to a saved position/orientation.
