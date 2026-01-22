@@ -103,37 +103,42 @@ function TurnLeft()
 end
 
 function Spiral()
-    TurnLeft() -- Face -Z
-    print("step 1") 
-   while Local_Z > -Area / 2 +1 do 
-        Move_Forward()
-    end
+    while true do 
+        TurnLeft() -- Face -Z
+        print("step 1") 
+        while Local_Z > -Area / 2 +1 +Laps do 
+            Move_Forward()
+        end
 
-    TurnRight() -- Face +X
-    print("step 2")
-    while Local_X < Area -1 do
-        Move_Forward()
-    end
+        TurnRight() -- Face +X
+        print("step 2")
+        while Local_X < Area -1 - Laps do
+            Move_Forward()
+        end
 
-    TurnRight() -- Face +Z
-    print("step 3")
-    while Local_Z < Area + 1 do
-        Move_Forward()
-    end
+        TurnRight() -- Face +Z
+        print("step 3")
+        while Local_Z < Area + 1 + Laps do
+            Move_Forward()
+        end
 
-    TurnRight() -- Face -X
-    print("step 4")
-    while Local_X > -Area do
-        Move_Forward()
-    end
+        TurnRight() -- Face -X
+        print("step 4")
+        while Local_X > 0 - Laps do
+            Move_Forward()
+        end
 
-    TurnRight() -- Face -Z
-    print("step 5")
-    while Local_Z > -Area / 2 do
-        Move_Forward()
-    end
+        TurnRight() -- Face -Z
+        print("step 5")
+        while Local_Z > 0 do
+            Move_Forward()
+        end
 
-    Laps = Laps + 1 
+        TurnRight()
+        Move_Forward()
+
+        Laps = Laps + 1 
+    end
 end
 
 function DigArea()
