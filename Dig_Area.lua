@@ -12,6 +12,7 @@ Local_Z = 0
 Direction = "+X"
 Dig = true
 Laps = 0 
+Current_Depth = 0 
 
 function DigUpDown()
     if Dig == true then
@@ -60,11 +61,13 @@ end
 
 function Move_Up()
     Local_Y = Local_Y + 1
+    turtle.digUp()
     turtle.up()
 end
 
 function Move_Down()
     Local_Y = Local_Y - 1
+    turtle.digDown()
     turtle.down()
 end
 
@@ -102,8 +105,29 @@ function TurnLeft()
     end
 end
 
+function Return_To_Start()
+    local half = math.floor(Area / 2)
+    if Local_X == half and Local_Z == half then
+        while Direction ~= "-X" do
+            TurnRight()
+        end
+
+        while Current_X > 0 do
+            Move_Forward()
+        end
+
+        TurnRight()
+        TurnRight()
+        Move_Down()
+        Move_Down()
+        Move_Down()
+
+        Current_Depth = Current_Depth + 3
+    end 
+end
+
 function Spiral()
-    while true do 
+    while Current_Depth < Depth do 
         TurnLeft() -- Face -Z
         print("step 1") 
         while Local_Z > -Area / 2 + 1 + Laps do 
