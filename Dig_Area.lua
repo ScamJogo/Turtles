@@ -11,6 +11,7 @@ Local_Z = 0
 
 Direction = "+X"
 Dig = true
+Laps = 0 
 
 function DigUpDown()
     if Dig == true then
@@ -121,9 +122,17 @@ function Spiral()
 
     TurnRight()
 
-    while Local_X > Area /2 do
+    while Local_X > Area do
         Move_Forward()
     end
+
+    TurnRight()
+
+    while Local_Z > -Area / 2 do
+        Move_Forward()
+    end
+
+    Laps = Laps + 1 
 end
 
 function DigArea()
