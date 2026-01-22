@@ -77,25 +77,17 @@ local function record_ore(name, x, y, z)
     end
 end
 
-local function has_ore_tag(data)
-    if not data or not data.tags then return false end
-    for tag, v in pairs(data.tags) do
-        if v then
-            -- Treat as ore only if the tag actually denotes ores, not replaceables.
-            -- Matches things like forge:ores, c:ores, minecraft:iron_ores, minecraft:diamond_ore.
-            if (tag:match("ores$") or tag:match("_ore$")) and not tag:match("ore_replace") then
-                return true
-            end
-        end
-    end
-    return false
+local function is_ore_block(data)
+    if not data or not data.name then return false end
+    -- Case-insensitive substring match on the block name only.
+    return string.find(string.lower(data.name), "ore", 1, true) ~= nil
 end
 
 -- Scan all 6 sides, add ore coordinates to queue; preserve facing.
 local function scan_adjacent_for_ore()
     -- front
     local ok, data = turtle.inspect()
-    if ok and has_ore_tag(data) then
+    if ok and is_ore_block(data) then
         local dx, dz = dir_vec(Dir)
         record_ore(data.name, X + dx, Y, Z + dz)
     end
@@ -108,7 +100,7 @@ local function scan_adjacent_for_ore()
         else                   Dir = "+X" end
 
         ok, data = turtle.inspect()
-        if ok and has_ore_tag(data) then
+        if ok and is_ore_block(data) then
             local dx, dz = dir_vec(Dir)
             record_ore(data.name, X + dx, Y, Z + dz)
         end
@@ -122,9 +114,9 @@ local function scan_adjacent_for_ore()
 
     -- up/down
     ok, data = turtle.inspectUp()
-    if ok and has_ore_tag(data) then record_ore(data.name, X, Y + 1, Z) end
+    if ok and is_ore_block(data) then record_ore(data.name, X, Y + 1, Z) end
     ok, data = turtle.inspectDown()
-    if ok and has_ore_tag(data) then record_ore(data.name, X, Y - 1, Z) end
+    if ok and is_ore_block(data) then record_ore(data.name, X, Y - 1, Z) end
 end
 
 -- Mine all queued ore (vein style), then return to a saved position/orientation.
