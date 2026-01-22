@@ -117,7 +117,7 @@ function Spiral()
 
     TurnRight() -- Face +Z
     print("step 3")
-    while Local_Z < Area do
+    while Local_Z < Area - 1 do
         Move_Forward()
     end
 
