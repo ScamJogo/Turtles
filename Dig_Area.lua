@@ -111,19 +111,19 @@ function Spiral()
 
     TurnRight() -- Face +X
     print("step 2")
-    while Local_X < Area / 2  do
+    while Local_X < Area / 2 -1 do
         Move_Forward()
     end
 
     TurnRight() -- Face +Z
     print("step 3")
-    while Local_Z < Area / 2  do
+    while Local_Z < Area / 2 -1 do
         Move_Forward()
     end
 
     TurnRight() -- Face -X
     print("step 4")
-    while Local_X > -Area / 2 do
+    while Local_X > -Area / 2 -1 do
         Move_Forward()
     end
 
